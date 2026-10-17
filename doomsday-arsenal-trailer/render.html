@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Doomsday Arsenal — render target</title>
+<link rel="stylesheet" href="src/fonts.css">
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block;width:1920px;height:1080px}</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">
+  import { Trailer } from './src/trailer.js';
+  import { FrameSource } from './src/gameplay-source.js';
+  import { gameplayWindow } from './src/timeline.js';
+
+  const params = new URLSearchParams(location.search);
+  const tr = new Trailer(document.getElementById('c'));
+  await Trailer.fonts();
+  await tr.loadImages();
+  tr.prepare();
+  if (params.get('frames')) {
+    tr.gameplay = new FrameSource(params.get('frames'), Number(params.get('count')), tr.cfg.fps);
+  }
+  const win = gameplayWindow(tr.tl);
+  window.trailerInfo = { duration: tr.duration, fps: tr.cfg.fps, gameplay: win, segs: tr.tl.segs.map((s) => ({ id: s.id, start: s.start, end: s.end })) };
+  window.drawAt = async (t) => {
+    if (tr.gameplay && t >= win.start && t < win.end) await tr.gameplay.load(t - win.start);
+    tr.render(t);
+  };
+  window.grab = (q = 0.92) => tr.canvas.toDataURL('image/jpeg', q);
+  window.renderSoundtrack = async () => {
+    const { renderSoundtrackWav } = await import('./src/music.js');
+    window.__wav = await renderSoundtrackWav(tr);
+    return window.__wav.length;
+  };
+  window.wavChunk = (i, size) => window.__wav.slice(i, i + size);
+  window.ready = true;
+</script>
+</body>
+</html>

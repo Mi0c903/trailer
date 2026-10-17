@@ -1,0 +1,18 @@
+{
+  "name": "doomsday-arsenal-trailer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Procedurally animated trailer for the Doomsday Arsenal Minecraft mod. Watch live in the browser or render to MP4.",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "render": "node scripts/render.mjs",
+    "render:preview": "node scripts/render.mjs --preview",
+    "qr": "node scripts/gen-qr.mjs",
+    "stills": "node scripts/stills.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1",
+    "qrcode": "1.5.4"
+  }
+}
