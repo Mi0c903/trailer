@@ -6,6 +6,8 @@ No stock footage, no voice-over. An AI (ARSENAL//OS) speaks in on-screen text.
 
 ▶ **Mod page:** https://www.curseforge.com/minecraft/mc-mods/doomsday-arsenal
 
+Picking this project up as an agent? Start with [`HANDOFF.md`](HANDOFF.md).
+
 ## The cut
 
 | Time | Scene |
