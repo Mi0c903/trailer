@@ -1,0 +1,38 @@
+name: Publish trailer player
+
+# Hosts the trailer's live player on GitHub Pages. Run by hand from the Actions tab
+# (it would replace anything else this repo publishes to Pages).
+# One-time setup: repo Settings → Pages → Source: "GitHub Actions".
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Collect site files
+        working-directory: doomsday-arsenal-trailer
+        run: |
+          mkdir -p ../_site/assets/gameplay ../_site/assets/screens
+          cp -r index.html src fonts ../_site/
+          cp assets/soundtrack.mp3 ../_site/assets/
+          cp assets/screens/*.jpg ../_site/assets/screens/
+          cp assets/gameplay/gameplay.mp4 ../_site/assets/gameplay/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
